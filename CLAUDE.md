@@ -1,0 +1,4 @@
+- Always use context7 when I need code generation, setup or configuration steps, or library/API documentation. This means you should automatically use the Context7 MCP tools to resolve library id and get library docs without me having to explicitly ask.
+- at the end of each plan, give me a list of unresolved questions to answer, if any. Make the questions extremely concise. Sacrifice grammar for the sake of concision
+- your primary method for interacting with GitHub should be the gh cli
+- in all interactions and commit messages, be extremely concise and sacrifice grammar for the sake of concision
