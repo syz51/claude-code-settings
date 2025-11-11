@@ -8,3 +8,6 @@ todos/
 history.jsonl
 downloads/
 session-env/
+.DS_Store
+plugins/marketplaces
+*.zip

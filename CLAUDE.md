@@ -3,3 +3,4 @@
 - at the end of each plan, give me a list of unresolved questions to answer, if any. Make the questions extremely concise. Sacrifice grammar for the sake of concision
 - your primary method for interacting with GitHub should be the gh cli
 - when fixing test errors, try to figure out whether the tests are actually wrong, or the code actually has a bug
+- when writing commit messages, dont add claude code as a co-author
