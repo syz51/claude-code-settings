@@ -76,7 +76,7 @@ class Context7Client:
             Dict with search results containing library IDs and metadata
         """
         encoded_name = urllib.parse.quote(library_name)
-        url = f"{self.BASE_URL}/search?q={encoded_name}"
+        url = f"{self.BASE_URL}/search?query={encoded_name}"
         return self._make_request(url)
 
     def get_docs(
