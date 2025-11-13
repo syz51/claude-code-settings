@@ -12,3 +12,5 @@ session-env/
 plugins/marketplaces
 *.zip
 settings.json
+installed_plugins.json
+known_marketplaces.json
