@@ -3,11 +3,12 @@
 ## Authentication
 
 All requests require bearer token authentication:
+
 ```
 Authorization: Bearer CONTEXT7_API_KEY
 ```
 
-Obtain API key from: https://context7.com/dashboard
+Obtain API key from: <https://context7.com/dashboard>
 
 ## Endpoints
 
@@ -16,9 +17,11 @@ Obtain API key from: https://context7.com/dashboard
 **Endpoint:** `GET https://context7.com/api/v1/search`
 
 **Parameters:**
+
 - `q` (required): Library name to search
 
 **Response Format:**
+
 ```json
 {
   "results": [
@@ -39,14 +42,17 @@ Obtain API key from: https://context7.com/dashboard
 **Endpoint:** `GET https://context7.com/api/v1/{org}/{project}/{version}`
 
 **Path Parameters:**
+
 - `org/project` (required): Library identifier (e.g., `vercel/next.js`)
 - `version` (optional): Specific version (e.g., `v15.1.8`)
 
 **Query Parameters:**
+
 - `topic` (optional): Filter by topic (e.g., "routing", "hooks")
 - `tokens` (optional): Limit documentation size (default: 5000)
 
 **Response Format:**
+
 ```json
 {
   "content": "Documentation content in markdown format",
@@ -58,10 +64,12 @@ Obtain API key from: https://context7.com/dashboard
 ## Rate Limiting
 
 **Limits:**
+
 - Unauthenticated: Low limits
 - Authenticated: Plan-based limits
 
 **Rate Limit Error (429):**
+
 ```json
 {
   "error": "Too many requests",

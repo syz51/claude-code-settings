@@ -14,12 +14,14 @@ Automatically detect and run linting, formatting, static analysis, and tests bef
 PROACTIVELY trigger before any git commit operation. Do not wait for user request.
 
 **Trigger conditions:**
+
 - User requests git commit
 - User requests creating pull request
 - Conversation naturally leads to commit point
 - User says "commit these changes"
 
 **Do NOT trigger for:**
+
 - Reading code or exploring files
 - Research or planning tasks
 - User explicitly says "skip checks" or "commit without checks"
@@ -31,16 +33,19 @@ PROACTIVELY trigger before any git commit operation. Do not wait for user reques
 Before running checks, review conversation history to avoid redundant work:
 
 **Look for recent test runs:**
+
 - Check if tests ran in conversation within last few messages
 - Check if they passed
 - Check if code changed since test run
 
 **Skip tests if:**
+
 - Tests ran recently (within ~5-10 messages)
 - Tests passed
 - No code changes after test run
 
 **Run tests if:**
+
 - Tests failed
 - Code changed after tests
 - Tests not run recently
@@ -59,18 +64,22 @@ python scripts/detect_tools.py
 If script unavailable or fails, manually detect by checking:
 
 **JavaScript/TypeScript:**
+
 - Check `package.json` for scripts: `lint`, `format`, `test`, `type-check`
 - Check devDependencies: `eslint`, `prettier`, `jest`, `vitest`, `typescript`
 
 **Python:**
+
 - Check for: `pyproject.toml`, `setup.py`, `requirements.txt`
 - Check PATH for: `black`, `ruff`, `flake8`, `mypy`, `pyright`, `pytest`
 
 **Go:**
+
 - Check for: `go.mod`
 - Tools: `gofmt`, `go vet`, `golangci-lint`, `go test`
 
 **Rust:**
+
 - Check for: `Cargo.toml`
 - Tools: `cargo fmt`, `cargo clippy`, `cargo test`
 
@@ -79,18 +88,21 @@ If script unavailable or fails, manually detect by checking:
 Execute in this sequence (stop at first failure):
 
 1. **Formatting** - Auto-fixable, run first
+
    - JS: `npm run format` or `npx prettier --write .`
    - Python: `black .` or `ruff format .`
    - Go: `gofmt -w .`
    - Rust: `cargo fmt`
 
 2. **Linting** - May require manual fixes
+
    - JS: `npm run lint` or `npx eslint .`
    - Python: `ruff check .` or `flake8 .`
    - Go: `golangci-lint run`
    - Rust: `cargo clippy -- -D warnings`
 
 3. **IDE Diagnostics** - Language server checks
+
    - Use `mcp__ide__getDiagnostics` if available for real-time IDE errors
    - Python: `pyright .` (comprehensive type checking)
    - TS: Already covered by `tsc --noEmit`
@@ -98,6 +110,7 @@ Execute in this sequence (stop at first failure):
    - Rust: `cargo check` (fast compilation check)
 
 4. **Type Checking** - If applicable
+
    - TS: `npx tsc --noEmit`
    - Python: `mypy .` (if mypy preferred over pyright)
 
@@ -110,10 +123,12 @@ Execute in this sequence (stop at first failure):
 ### 3. Handle Results
 
 **On success:**
+
 - Proceed with git commit
 - No output needed unless user asks
 
 **On failure:**
+
 - Parse error output
 - Attempt automatic fixes for:
   - Formatting issues (re-run formatter)
@@ -122,12 +137,14 @@ Execute in this sequence (stop at first failure):
   - Missing type annotations (simple cases)
 
 **Cannot auto-fix:**
+
 - Logic errors in tests
 - Complex type errors
 - Semantic lint violations
 - Failing test assertions
 
 When blocked:
+
 1. Show concise error summary
 2. Explain what failed
 3. Pause and ask user how to proceed
@@ -137,6 +154,7 @@ When blocked:
 ### Auto-fixable
 
 Run with fix flags:
+
 - `eslint --fix`
 - `prettier --write`
 - `black .`
@@ -153,6 +171,7 @@ Run with fix flags:
 ### Multiple errors
 
 Fix in batches:
+
 - Group by file
 - Fix highest-priority first (compilation errors before style)
 - Re-run after each batch
@@ -199,6 +218,7 @@ python scripts/detect_tools.py [path]
 ```
 
 Output format:
+
 ```json
 {
   "project_path": "/path/to/project",
@@ -213,12 +233,14 @@ Output format:
 ## IDE Diagnostics Integration
 
 If `mcp__ide__getDiagnostics` tool is available:
+
 - Use it to fetch real-time diagnostics from language servers
 - Complement or replace command-line type checkers
 - Provides faster feedback than running full type checking
 - Parse and fix diagnostics same as command-line tool output
 
 Example:
+
 ```
 mcp__ide__getDiagnostics → Returns errors from pyright/tsserver/etc
 → Parse errors → Fix issues → Re-check

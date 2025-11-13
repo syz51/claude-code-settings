@@ -37,7 +37,7 @@ class Context7Client:
         """Make HTTP request to Context7 API with authentication."""
         headers = {
             "Authorization": f"Bearer {self.api_key}",
-            "X-Context7-Source": "claude-skill"
+            "X-Context7-Source": "claude-skill",
         }
 
         req = urllib.request.Request(url, headers=headers)
@@ -57,7 +57,9 @@ class Context7Client:
                 elif e.code == 404:
                     raise Exception("Library not found")
                 else:
-                    raise Exception(f"API error {e.code}: {error_data.get('error', error_body)}")
+                    raise Exception(
+                        f"API error {e.code}: {error_data.get('error', error_body)}"
+                    )
             except json.JSONDecodeError:
                 raise Exception(f"HTTP {e.code}: {error_body}")
         except urllib.error.URLError as e:
@@ -78,10 +80,7 @@ class Context7Client:
         return self._make_request(url)
 
     def get_docs(
-        self,
-        library_id: str,
-        topic: Optional[str] = None,
-        tokens: Optional[int] = None
+        self, library_id: str, topic: Optional[str] = None, tokens: Optional[int] = None
     ) -> Dict[str, Any]:
         """
         Fetch documentation for a library.
@@ -149,7 +148,9 @@ def main():
                 print(json.dumps(result, indent=2))
             else:
                 if "results" in result and result["results"]:
-                    print(f"\nFound {len(result['results'])} results for '{args.library_name}':\n")
+                    print(
+                        f"\nFound {len(result['results'])} results for '{args.library_name}':\n"
+                    )
                     for i, lib in enumerate(result["results"], 1):
                         print(f"{i}. {lib.get('title', 'N/A')}")
                         print(f"   ID: {lib.get('id', 'N/A')}")
