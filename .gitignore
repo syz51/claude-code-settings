@@ -11,3 +11,4 @@ session-env/
 .DS_Store
 plugins/marketplaces
 *.zip
+settings.json
