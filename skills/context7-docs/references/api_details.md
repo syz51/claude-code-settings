@@ -4,7 +4,7 @@
 
 All requests require bearer token authentication:
 
-```
+```text
 Authorization: Bearer CONTEXT7_API_KEY
 ```
 
@@ -18,7 +18,7 @@ Obtain API key from: <https://context7.com/dashboard>
 
 **Parameters:**
 
-- `q` (required): Library name to search
+- `query` (required): Library name to search
 
 **Response Format:**
 
