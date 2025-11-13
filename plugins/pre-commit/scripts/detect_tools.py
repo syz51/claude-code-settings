@@ -12,7 +12,7 @@ import json
 import os
 import sys
 from pathlib import Path
-from typing import Dict, List, Any
+from typing import Dict, Any
 
 
 def detect_javascript_tools(project_path: Path) -> Dict[str, Any]:
@@ -25,6 +25,7 @@ def detect_javascript_tools(project_path: Path) -> Dict[str, Any]:
 
     try:
         import json as json_lib
+
         with open(package_json) as f:
             package_data = json_lib.load(f)
 
@@ -132,10 +133,7 @@ def main():
     all_tools.update(detect_go_tools(project_path))
     all_tools.update(detect_rust_tools(project_path))
 
-    result = {
-        "project_path": str(project_path),
-        "tools": all_tools
-    }
+    result = {"project_path": str(project_path), "tools": all_tools}
 
     print(json.dumps(result, indent=2))
 
