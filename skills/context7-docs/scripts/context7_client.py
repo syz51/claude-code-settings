@@ -8,7 +8,7 @@ import os
 import sys
 import json
 import argparse
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, Union
 import urllib.request
 import urllib.error
 import urllib.parse
@@ -33,7 +33,7 @@ class Context7Client:
                 "or pass api_key parameter. Get key at: https://context7.com/dashboard"
             )
 
-    def _make_request(self, url: str) -> Dict[str, Any]:
+    def _make_request(self, url: str) -> Union[Dict[str, Any], str]:
         """Make HTTP request to Context7 API with authentication."""
         headers = {
             "Authorization": f"Bearer {self.api_key}",
@@ -44,7 +44,25 @@ class Context7Client:
 
         try:
             with urllib.request.urlopen(req) as response:
-                return json.loads(response.read().decode())
+                content_type = response.headers.get("Content-Type", "")
+                body = response.read().decode()
+
+                # Handle different content types
+                if "application/json" in content_type:
+                    return json.loads(body)
+                elif any(
+                    t in content_type
+                    for t in ["text/", "application/xml", "application/xhtml"]
+                ):
+                    # Return text content (markdown, plain text, html, xml, etc)
+                    return body
+                else:
+                    # Try JSON first, fallback to text
+                    try:
+                        return json.loads(body)
+                    except json.JSONDecodeError:
+                        return body
+
         except urllib.error.HTTPError as e:
             error_body = e.read().decode()
             try:
@@ -65,7 +83,7 @@ class Context7Client:
         except urllib.error.URLError as e:
             raise Exception(f"Network error: {e.reason}")
 
-    def search_library(self, library_name: str) -> Dict[str, Any]:
+    def search_library(self, library_name: str) -> Union[Dict[str, Any], str]:
         """
         Search for a library and resolve to Context7-compatible ID.
 
@@ -81,7 +99,7 @@ class Context7Client:
 
     def get_docs(
         self, library_id: str, topic: Optional[str] = None, tokens: Optional[int] = None
-    ) -> Dict[str, Any]:
+    ) -> Union[Dict[str, Any], str]:
         """
         Fetch documentation for a library.
 
@@ -91,7 +109,7 @@ class Context7Client:
             tokens: Optional max tokens to retrieve (default: 5000)
 
         Returns:
-            Dict with documentation content
+            Documentation content (dict if JSON, string if text/markdown/html)
         """
         # Remove leading slash if present
         library_id = library_id.lstrip("/")
@@ -145,9 +163,16 @@ def main():
             result = client.search_library(args.library_name)
 
             if args.json:
-                print(json.dumps(result, indent=2))
+                if isinstance(result, str):
+                    print(json.dumps({"content": result}, indent=2))
+                else:
+                    print(json.dumps(result, indent=2))
             else:
-                if "results" in result and result["results"]:
+                if (
+                    isinstance(result, dict)
+                    and "results" in result
+                    and result["results"]
+                ):
                     print(
                         f"\nFound {len(result['results'])} results for '{args.library_name}':\n"
                     )
@@ -156,6 +181,8 @@ def main():
                         print(f"   ID: {lib.get('id', 'N/A')}")
                         print(f"   Description: {lib.get('description', 'N/A')}")
                         print()
+                elif isinstance(result, str):
+                    print(result)
                 else:
                     print(f"No results found for '{args.library_name}'")
 
@@ -163,12 +190,21 @@ def main():
             result = client.get_docs(args.library_id, args.topic, args.tokens)
 
             if args.json:
-                print(json.dumps(result, indent=2))
+                # Handle both string and dict responses for JSON output
+                if isinstance(result, str):
+                    print(json.dumps({"content": result}, indent=2))
+                else:
+                    print(json.dumps(result, indent=2))
             else:
                 # Pretty print documentation
-                if "content" in result:
+                if isinstance(result, str):
+                    # Text response (markdown, html, plain text, etc)
+                    print(result)
+                elif isinstance(result, dict) and "content" in result:
+                    # JSON response with content field
                     print(result["content"])
                 else:
+                    # Unknown JSON structure
                     print(json.dumps(result, indent=2))
 
     except Exception as e:
