@@ -1,6 +1,6 @@
 ---
 name: context7-docs
-description: Fetch up-to-date library documentation using Context7's API. Use when code generation, setup steps, or library/API documentation is needed. Provides progressive token usage vs MCP - metadata ~100 words always in context, full skill under 5k words when triggered, resources loaded as needed.
+description: PRIMARY tool for fetching library/framework documentation. PROACTIVELY use instead of WebFetch/WebSearch when user requests docs, API references, setup guides, or code examples for any programming library or framework. Use this skill immediately when detecting queries like "show me X docs", "how do I use Y", "get Z documentation", etc. Token-efficient alternative to MCP servers.
 ---
 
 # Context7 Documentation Fetcher
@@ -9,12 +9,25 @@ description: Fetch up-to-date library documentation using Context7's API. Use wh
 
 Fetch up-to-date documentation and code examples for any library using Context7's HTTP API. This skill replicates Context7 MCP functionality with token-efficient progressive disclosure.
 
-**When to use:**
+## When to Use This Skill
 
-- Code generation requiring current library APIs
-- Setup/configuration steps for frameworks or tools
-- Library documentation or usage examples
-- API reference lookups
+**This skill should be the FIRST choice for library/framework documentation.**
+
+**Trigger patterns:**
+
+- User asks for documentation: "get me the React docs", "show me Next.js docs"
+- User needs API references: "how do I use X API", "what's the syntax for Y"
+- User wants setup instructions: "how to install Z", "configure W"
+- Code generation tasks: Before writing code for a library, fetch its docs first
+- User mentions library names: "help with FastAPI", "using Tailwind"
+- Troubleshooting with libraries: When fixing bugs or errors related to specific libraries
+
+**Benefits over WebFetch/WebSearch:**
+
+- Curated, current documentation from official sources
+- Structured format optimized for code generation
+- Topic filtering for focused results
+- Version-specific documentation when needed
 
 ## Setup
 
@@ -45,7 +58,7 @@ python scripts/context7_client.py search "React"
 
 **Output format:**
 
-```
+```text
 Found 3 results for 'React':
 
 1. React
@@ -163,7 +176,7 @@ python scripts/context7_client.py docs vercel/next.js --topic "app router" --tok
 
 ## Usage Examples
 
-**Example 1: Next.js App Router documentation**
+### Example 1: Next.js App Router documentation
 
 ```bash
 # Search for Next.js
@@ -173,14 +186,14 @@ python scripts/context7_client.py search "Next.js"
 python scripts/context7_client.py docs vercel/next.js --topic "app router"
 ```
 
-**Example 2: React hooks with token limit**
+### Example 2: React hooks with token limit
 
 ```bash
 # Direct fetch (known ID)
 python scripts/context7_client.py docs facebook/react --topic hooks --tokens 2000
 ```
 
-**Example 3: Specific library version**
+### Example 3: Specific library version
 
 ```bash
 # Search for library
@@ -192,20 +205,20 @@ python scripts/context7_client.py docs tailwindlabs/tailwindcss/v3.4.0
 
 ## Integration Tips
 
-**For code generation:**
+### For code generation
 
 1. Search for library if ID unknown
 2. Fetch docs with relevant topic filter
 3. Use documentation to generate accurate, up-to-date code
 4. Consider token limits based on scope
 
-**For setup/configuration:**
+### For setup/configuration
 
 1. Fetch docs without topic filter for comprehensive guide
 2. Use higher token limit (5000+) for full instructions
 3. Look for "getting started" or "installation" sections
 
-**For API references:**
+### For API references
 
 1. Use topic filter for specific API sections
 2. Moderate token limits (2000-3000) for focused references
