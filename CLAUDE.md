@@ -3,3 +3,4 @@
 - your primary method for interacting with GitHub should be the gh cli
 - when fixing test errors, try to figure out whether the tests are actually wrong, or the code actually has a bug
 - when writing commit messages, dont add claude code as a co-author
+- when need to fetch documentation on libraries or apis for coding related topics, try to use skills first before using fetch
