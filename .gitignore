@@ -14,3 +14,6 @@ plugins/marketplaces
 settings.json
 installed_plugins.json
 known_marketplaces.json
+stats-cache.json
+plans/
+plugins/cache

@@ -1,0 +1,6 @@
+[project]
+name = "browser-testing"
+version = "0.1.0"
+description = "Browser automation skill using chrome-devtools-mcp"
+requires-python = ">=3.10"
+dependencies = ["fastmcp>=2.0.0"]
