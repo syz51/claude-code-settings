@@ -5,3 +5,5 @@
 - when writing commit messages, dont add claude code as a co-author
 - when need to fetch documentation on libraries or apis for coding related topics, try to use skills first before using fetch
 - when errors are found in code, don't ignore them. Try to see if they could be fixed fixed
+- use bunx instead of npx, and use bun instead of npm or pnpm or yarn
+
